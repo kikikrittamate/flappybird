@@ -92,6 +92,7 @@ class PillarPair(Sprite):
     def game_over(self):
         self.is_gameover = True
 
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Monkey Banana Game")
