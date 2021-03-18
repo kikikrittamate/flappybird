@@ -16,7 +16,7 @@ class Dot(Sprite):
     def update(self):
         self.y += self.vy
         self.vy += GRAVITY
-##____
+
 class FlappyGame(GameApp):
     def create_sprites(self):
         self.dot = Dot(self, 'images/dot.png', CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2)
