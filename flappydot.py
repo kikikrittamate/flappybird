@@ -39,6 +39,7 @@ class Dot(Sprite):
     def game_over(self):
         self.is_gameover = True
 
+
 class FlappyGame(GameApp):
     def create_sprites(self):
         self.dot = Dot(self, 'images/dot.png', CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2)
