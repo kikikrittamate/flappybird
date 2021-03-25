@@ -1,6 +1,5 @@
-import tkinter as tk
-
 import random
+import tkinter as tk
 
 from gamelib import Sprite, GameApp, Text
 
@@ -39,8 +38,15 @@ class Dot(Sprite):
     def game_over(self):
         self.is_gameover = True
 
+    def is_hit(self):
+        if (self.y > app.pillar_pair.y + 60 or self.y < app.pillar_pair.y - 60) and self.x == app.pillar_pair.x:
+            return True
+        elif self.x == app.pillar_pair.x and not self.is_gameover:
+            app.score.set_text(int(app.score.text) + 1)
+
 class FlappyGame(GameApp):
     def create_sprites(self):
+        self.canvas.config(background="lightblue")
         self.dot = Dot(self, 'images/dot.png', CANVAS_WIDTH // 2, CANVAS_HEIGHT // 2)
         self.elements.append(self.dot)
         self.pillar_pair = PillarPair(self, 'images/pillar-pair.png', CANVAS_WIDTH, PILLAR_HEIGHT// 2)
@@ -50,15 +56,17 @@ class FlappyGame(GameApp):
         self.is_started = False
         self.is_gameover = False
         self.create_sprites()
+        self.score = Text(self, 0, 400, 50)
 
     def pre_update(self):
         pass
 
     def post_update(self):
-        if self.dot.is_out_of_screen() and not self.is_gameover:
+        if (self.dot.is_out_of_screen() or self.dot.is_hit()) and not self.is_gameover:
             self.is_gameover = True
-            self.dot.game_over()
             self.pillar_pair.game_over()
+            self.dot.game_over()
+            Text(app, "GAME OVER", 400, 100)
 
     def on_key_pressed(self, event):
         if event.char == " ":
@@ -68,8 +76,6 @@ class FlappyGame(GameApp):
                 self.dot.start()
             elif not self.is_gameover:
                 self.dot.jump()
-
-
 
 class PillarPair(Sprite):
     def init_element(self):
@@ -96,7 +102,7 @@ class PillarPair(Sprite):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Monkey Banana Game")
- 
+
     # do not allow window resizing
     root.resizable(False, False)
     app = FlappyGame(root, CANVAS_WIDTH, CANVAS_HEIGHT, UPDATE_DELAY)
